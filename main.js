@@ -29,9 +29,6 @@ db.once('open', function() {
     console.log("we are connected!!!")
 });
 
-const demoRouter = require('./routes/demo');
-app.use('/freedemo', demoRouter);
-
 app.set("port", process.env.PORT || 3000);
 app.set("view engine", "ejs");
 
@@ -45,12 +42,6 @@ app.use(morgan("combined"));
 app.use(layouts);
 app.use(express.static("public"));
 app.use(expressValidator());
-app.use(
-  bodyParser.urlencoded({
-    extended: true
-  })
-);
-app.use(bodyParser.json());
 
 app.use(cookieParser("secretCuisine123"));
 app.use(
@@ -64,6 +55,13 @@ app.use(
   })
 );
 app.use(connectFlash());
+
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+);
+app.use(bodyParser.json());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -79,6 +77,10 @@ app.use((req, res, next) => {
 });
 
 app.use("/", router);
+
+const demoRouter = require('./routes/demo');
+app.use('/freedemo', demoRouter);
+
 
 
 const server = app.listen(app.get("port"), () => {

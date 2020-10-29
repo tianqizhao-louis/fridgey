@@ -7,10 +7,10 @@ const mongoose = require("mongoose");
 var demoask = require('../models/demoask')
 var demouser = mongoose.model('demoask')
 
-router.post('/', (req, res, next) => {
+router.post('/freedemo', (req, res, next) => {
     var newUser = new demouser();
-    const {theuseremail} = req.body;
-    demouser.useremail = theuseremail;
+    console.log(req.body);
+    demouser.useremail = req.body.nemail;
 
     newUser.save((err, doc) => {
         if (!err){
