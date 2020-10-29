@@ -8,4 +8,4 @@ var demoaskSchema = new Schema({
     useremail: {type: String, required: "This field is required."}
 });
 
-module.exports = mongoose.model('demoask', demoaskSchema, "showcollection");
+module.exports = mongoose.model('demoask', demoaskSchema, "subscriberscollection");

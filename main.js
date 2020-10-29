@@ -1,19 +1,19 @@
 "use strict";
 
 const express = require("express"),
-  bodyParser = require('body-parser'),
   layouts = require("express-ejs-layouts"),
-  app = express(),
   router = require("./routes/index"),
-  morgan = require("morgan"),
   mongoose = require("mongoose"),
+  path = require('path'),
   methodOverride = require("method-override"),
   passport = require("passport"),
   cookieParser = require("cookie-parser"),
   expressSession = require("express-session"),
   expressValidator = require("express-validator"),
   connectFlash = require("connect-flash"),
+  morgan = require("morgan"),
   User = require("./models/user"),
+  bodyParser = require('body-parser'),
   demoask = require("./models/demoask");
 
 
@@ -29,6 +29,8 @@ db.once('open', function() {
     console.log("we are connected!!!")
 });
 
+const app = express();
+
 app.set("port", process.env.PORT || 3000);
 app.set("view engine", "ejs");
 
@@ -38,30 +40,21 @@ app.use(
   })
 );
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
+
 app.use(morgan("combined"));
 app.use(layouts);
 app.use(express.static("public"));
 app.use(expressValidator());
-
-app.use(cookieParser("secretCuisine123"));
-app.use(
-  expressSession({
-    secret: "secretCuisine123",
-    cookie: {
-      maxAge: 4000000
-    },
-    resave: false,
-    saveUninitialized: false
-  })
-);
 app.use(connectFlash());
 
-app.use(
-  bodyParser.urlencoded({
-    extended: true
-  })
-);
-app.use(bodyParser.json());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -69,17 +62,10 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use((req, res, next) => {
-  res.locals.loggedIn = req.isAuthenticated();
-  res.locals.currentUser = req.user;
-  res.locals.flashMessages = req.flash();
-  next();
-});
-
 app.use("/", router);
 
-const demoRouter = require('./routes/demo');
-app.use('/freedemo', demoRouter);
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 

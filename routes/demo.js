@@ -1,25 +1,9 @@
 "use strict";
 
-var express = require('express');
-var router = express.Router();
-const mongoose = require("mongoose");
+const router = require("express").Router(),
+    demoController = require("../controllers/demoController");
 
-var demoask = require('../models/demoask')
-var demouser = mongoose.model('demoask')
+router.get("/", demoController.index);
+router.post("/", demoController.savetodatabase);
 
-router.post('/freedemo', (req, res, next) => {
-    var newUser = new demouser();
-    console.log(req.body);
-    demouser.useremail = req.body.nemail;
-
-    newUser.save((err, doc) => {
-        if (!err){
-            console.log("success");
-            res.redirect('/');
-        }else{
-            console.log('Error during record insertion: ' + err);
-        }
-    })
- });
-
- module.exports = router;
+module.exports = router;
