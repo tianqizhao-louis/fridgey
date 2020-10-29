@@ -19,7 +19,7 @@ const express = require("express"),
 
 
 mongoose.connect(
-  process.env.MONGODB_URI || "mongodb://localhost:27017/emaillist",
+  process.env.MONGODB_URI || "mongodb+srv://dbUser:database@cluster0.zppoe.mongodb.net/Cluster0?retryWrites=true&w=majority",
   {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false}
 );
 
